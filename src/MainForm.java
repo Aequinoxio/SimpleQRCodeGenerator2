@@ -23,12 +23,14 @@ import javax.swing.event.DocumentListener;
  * @author utente
  */
 public class MainForm extends javax.swing.JFrame {
+
     int edge; // QRCODE icon edge
+
     /**
      * Creates new form MainForm
      */
     public MainForm() {
-	initComponents();
+        initComponents();
         taText2BeEncoded.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -64,7 +66,7 @@ public class MainForm extends javax.swing.JFrame {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        MenuBar = new javax.swing.JMenuBar();
+        menuBar = new javax.swing.JMenuBar();
         menuAbout = new javax.swing.JMenu();
         menuAboutItem = new javax.swing.JMenuItem();
 
@@ -121,9 +123,9 @@ public class MainForm extends javax.swing.JFrame {
         });
         menuAbout.add(menuAboutItem);
 
-        MenuBar.add(menuAbout);
+        menuBar.add(menuAbout);
 
-        setJMenuBar(MenuBar);
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,8 +189,8 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQREncodeActionPerformed
 
     private void menuAboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAboutItemActionPerformed
-	JOptionPane.showMessageDialog(this,"Semplice encoder QRCode basato sulla libreria Zxing\nBy Galluzzo Gabriele");
-	
+        JOptionPane.showMessageDialog(this, "Semplice encoder QRCode basato sulla libreria Zxing\nBy Galluzzo Gabriele");
+
     }//GEN-LAST:event_menuAboutItemActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
@@ -198,8 +200,8 @@ public class MainForm extends javax.swing.JFrame {
     private void qrCodeIconComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_qrCodeIconComponentResized
         // TODO add your handling code here:
         Dimension dim = evt.getComponent().getSize();
-        edge=Math.min(dim.height,dim.width);
-        this.writeQRCode();  
+        edge = Math.min(dim.height, dim.width);
+        this.writeQRCode();
     }//GEN-LAST:event_qrCodeIconComponentResized
 
     private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
@@ -210,72 +212,76 @@ public class MainForm extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-	/* Set the Nimbus look and feel */
+        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
 	 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-	 */
-	try {
-	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-		if ("Nimbus".equals(info.getName())) {
-		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-		    break;
-		}
-	    }
-	} catch (ClassNotFoundException ex) {
-	    java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (InstantiationException ex) {
-	    java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (IllegalAccessException ex) {
-	    java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-	    java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	}
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
         //</editor-fold>
 
-	/* Create and display the form */
-	java.awt.EventQueue.invokeLater(new Runnable() {
-	    public void run() {
-		new MainForm().setVisible(true);
-	    }
-	});
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new MainForm().setVisible(true);
+            }
+        });
     }
-    
+
+    /**
+     * Write the QRCode imege
+     */
     public void writeQRCode() {
-	QRCodeWriter writer = new QRCodeWriter();
-        Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+        QRCodeWriter writer = new QRCodeWriter();
+        Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
         //hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-        hints.put(EncodeHintType.MARGIN, 2); /* default = 4 */
-	
-	//int width = 256, height = 256;
-        int width=this.edge;
-        int height=this.edge;
-	BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // create an empty image
-	int white = 255 << 16 | 255 << 8 | 255;
-	int black = 0;
-	String testo= taText2BeEncoded.getText();
-	if (testo.equals("")){
+        hints.put(EncodeHintType.MARGIN, 2);
+        /* default = 4 */
+
+        //int width = 256, height = 256;
+        int width = this.edge;
+        int height = this.edge;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // create an empty image
+        int white = 255 << 16 | 255 << 8 | 255;
+        int black = 0;
+        String testo = taText2BeEncoded.getText();
+        if (testo.equals("")) {
             return;
 //	    testo="SimpleQRCodeGenerator";
 //	    taText2BeEncoded.setText(testo);
-	}
-	try {
-	    BitMatrix bitMatrix = writer.encode(testo, BarcodeFormat.QR_CODE, width, height,hints);
-	    for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-		    image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
-		}
-	    }
-	}catch (WriterException we){
-	    we.printStackTrace();
-	}
-	
-	qrCodeIcon.setIcon(new ImageIcon(image));
+        }
+        try {
+            BitMatrix bitMatrix = writer.encode(testo, BarcodeFormat.QR_CODE, width, height, hints);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
+                }
+            }            
+        } catch (WriterException we) {
+            // we.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Errore nella codifica del messaggio",
+                    "Attenzione",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+        qrCodeIcon.setIcon(new ImageIcon(image));
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuBar MenuBar;
     private javax.swing.JButton btnQREncode;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -284,6 +290,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblEtichettaTextArea;
     private javax.swing.JMenu menuAbout;
     private javax.swing.JMenuItem menuAboutItem;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel qrCodeIcon;
     private javax.swing.JTextArea taText2BeEncoded;
     // End of variables declaration//GEN-END:variables
